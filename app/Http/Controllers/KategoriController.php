@@ -4,27 +4,57 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\DataTables\KategoriDataTable;
+use App\Models\KategoriModel;
 
 class KategoriController extends Controller
 {
-    public function index()
+    public function index(KategoriDataTable $dataTable)
     {
-        // $data = [
-        //     'kategori_kode' => 'SNK',
-        //     'kategori_nama' => 'Snack/Makanan Ringan',
-        //     'created_at' => now()
-        // ];
+        return $dataTable->render('kategori.index');
+    }
 
-        // DB::table('m_kategori')->insert($data);
-        // return 'Insert Data Baru Berhasil';
+    public function create()
+    {
+        return view('kategori.create');
+    }
 
-        // $row = DB::table('m_kategori')->where('kategori_kode', 'SNK')->UPDATE(['kategori_nama' => 'camilan']);
-        // return 'Update Data Berhasil. Jumlah Data yang Diupdate: ' . $row . ' baris.';
+    public function store(Request $request)
+    {
+        KategoriModel::create([
+            'kategori_kode' => $request->kodeKategori,
+            'kategori_nama' => $request->namaKategori
+        ]);
+        return redirect('/kategori');
+    }
 
-        // $row = DB::table('m_kategori')->where('kategori_kode', 'SNK')->DELETE();
-        // return 'Delete Data Berhasil. Jumlah Data yang Dihapus: ' . $row . ' baris.';
+    public function update($id)
+    {
+        $kategori = KategoriModel::find($id);
+        return view('kategori.update', ['data' => $kategori]);
+    }
 
-        $data = DB::table("m_kategori")->get();
-        return view('kategori', ['data' => $data]);
+    public function save_update($id, Request $request)
+    {
+        $request->validate([
+            'kodeKategori' => 'required',
+            'namaKategori' => 'required',
+        ]);
+
+        $kategori = KategoriModel::findOrFail($id);
+
+        $kategori->kategori_kode = $request->kodeKategori;
+        $kategori->kategori_nama = $request->namaKategori;
+
+        $kategori->save();
+        return redirect('/kategori')->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function delete($id)
+    {
+        $user = KategoriModel::find($id);
+        $user->delete();
+
+        return redirect('/kategori');
     }
 }
