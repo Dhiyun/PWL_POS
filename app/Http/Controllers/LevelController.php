@@ -2,22 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\LevelDataTable;
+use App\Http\Requests\StorePostRequest;
+use App\Models\LevelModel;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LevelController extends Controller
 {
-    public function index() {
-        // DB::insert('INSERT INTO m_level (level_kode, level_nama, created_at) values (?, ?, ?)', ['CUS', 'Pelanggan', now()]);
-        // return 'insert data baru berhasil';
+    public function index(LevelDataTable $dataTable) 
+    {
+        return $dataTable->render('level.index');
+    }
 
-        // $row = DB::UPDATE('UPDATE m_level SET level_nama = ? WHERE level_kode = ?', ['Customer', 'CUS']);
-        // return 'Update Data Berhasil. Jumlah Data yang Diupdate: ' . $row . ' baris.';
+    public function create(): View
+    {
+        return view('level.create');
+    }
 
-        // $row = DB::DELETE('DELETE FROM m_level WHERE level_kode = ?', ['CUS']);
-        // return 'Delete Data Berhasil. Jumlah Data yang Dihapus: ' . $row . ' baris';
+    public function store(StorePostRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
 
-        $data = DB::SELECT('SELECT * FROM m_level');
-        return view('level', ['data' => $data]);
+        $validated = $request->safe()->only('level_kode', 'level_nama');
+        $validated = $request->safe()->except('level_kode', 'level_nama');
+
+        LevelModel::create([
+            'level_kode' => $validated['kodeLevel'],
+            'level_nama' => $validated['namaLevel']
+        ]);
+
+        return redirect('/level');
+    }
+
+    public function update($id)
+    {
+        $level = LevelModel::find($id);
+        return view('level.update', ['data' => $level]);
+    }
+
+    public function save_update($id, Request $request)
+    {
+        $request->validate([
+            'kodeLevel' => 'required',
+            'namaLevel' => 'required',
+        ]);
+
+        $level = LevelModel::findOrFail($id);
+
+        $level->level_kode = $request->kodeLevel;
+        $level->level_nama = $request->namaLevel;
+
+        $level->save();
+        return redirect('/level')->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function delete($id)
+    {
+        $user = LevelModel::find($id);
+        $user->delete();
+
+        return redirect('/level');
     }
 }

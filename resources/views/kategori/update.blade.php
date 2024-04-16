@@ -12,7 +12,7 @@
         </div>
         
         <div class="card-body">
-            <form method="post" action="{{ route('saveupdate', $data->kategori_id) }}">
+            <form method="post" action="{{ route('saveupdatekategori', $data->kategori_id) }}">
                 {{ csrf_field() }}
                 {{ method_field('PUT') }}
 
@@ -25,7 +25,7 @@
                     <label for="namaKategori">Nama Kategori</label>
                     <input type="text" class="form-control" id="namaKategori" name="namaKategori" value="{{ $data->kategori_nama }}">
                 </div>
-                <a href="{{ route('index') }}" class="btn btn-secondary">Back</a>
+                <a href="{{ route('indexkategori') }}" class="btn btn-secondary">Back</a>
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>

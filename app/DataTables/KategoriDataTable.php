@@ -66,11 +66,11 @@ class KategoriDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('kategori_id'),
-            Column::make('kategori_kode'),
-            Column::make('kategori_nama'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('kategori_id')->width('15%'), 
+            Column::make('kategori_kode')->width('15%'), 
+            Column::make('kategori_nama')->width('20%'), 
+            Column::make('created_at')->width('10%'), 
+            Column::make('updated_at')->width('10%'), 
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
