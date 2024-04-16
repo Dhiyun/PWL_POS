@@ -1,58 +1,45 @@
-@extends('adminlte::page')
-
-@section('title', 'Form Level')
-
-@section('content_header')
-    <h1>Form Level</h1>
-@stop
-
+@extends('layouts.template')
 @section('content')
-<!-- general form elements disabled -->
-<div class="container">
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    <div class="card card-warning">
-        <div class="card-header">
-          <h3 class="card-title">Input Level</h3>
-        </div>
-        
-        <form method="post" action="../level">
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <h3 class="card-title">{{ $page->title }}</h3>
+        <div class="card-tools"></div>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url('level') }}" class="form-horizontal">
             @csrf
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="kodeLevel">Level Kode</label>
-                    <input type="text" class="form-control @error('kodeLevel') is-invalid @enderror" id="kodeLevel" name="kodeLevel" placeholder="Enter Code Level">
-                    @error('kodeLevel')
-                        <div class="alert alert-danger">{{ $message }}</div>
+            <div class="form-group row">
+                <label class="col-1 control-label col-form-label">Kode Level</label>
+                <div class="col-11">
+                    <input type="text" class="form-control" id="level_kode" name="level_kode" value="{{ old('level_kode') }}" required>
+                    @error('level_kode')
+                    <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label for="namaLevel">Level Name</label>
-                    <input type="text" class="form-control" id="namaLevel" name="namaLevel" placeholder="Enter Nama Level">
-                    @error('namaLevel')
-                        <div class="alert alert-danger">{{ $message }}</div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-1 control-label col-form-label">Nama Level</label>
+                <div class="col-11">
+                    <input type="text" class="form-control" id="level_nama" name="level_nama" value="{{ old('level_nama') }}" required>
+                    @error('level_nama')
+                    <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
-                    <a href="{{ route('indexlevel') }}" class="btn btn-secondary">Back</a>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-1 control-label col-form-label"></label>
+                <div class="col-11">
+                    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                    <a class="btn btn-sm btn-default ml-1" href="{{ url('level') }}">Kembali</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
-@stop
-
-@section('js')
-    <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
-@stop
-    
+@endsection
+@push('css')
+@endpush
+@push('js')
+@endpush
