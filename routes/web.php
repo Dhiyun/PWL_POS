@@ -105,6 +105,8 @@ Route::group(['prefix' => 'transaksi'], function() {
     Route::delete('/{id}', [TransaksiController::class, 'destroy']);
 });
 
+
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
